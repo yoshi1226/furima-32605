@@ -53,7 +53,7 @@ Things you may want to cover:
 | prefecture_id          | integer    | null: false                    |
 | scheduled_delivery_id  | integer    | null: false                    |
 | price                  | integer    | null: false                    |
-| user_id                | references | null: false, foreign_key: true |
+| user                   | references | null: false, foreign_key: true |
 
 ### Association
 - belongs_to :user
@@ -69,7 +69,7 @@ Things you may want to cover:
 | address            | string     | null: false                    |
 | building           | string     |                                |
 | phone_number       | string     | null: false                    |
-| purchase_record_id | references | null: false, foreign_key: true |
+| purchase_record    | references | null: false, foreign_key: true |
 
 ### Association
 - belongs_to :purchase_record
@@ -83,5 +83,5 @@ Things you may want to cover:
 
 ### Association
 - belongs_to :user
-- belongs_to :user
+- belongs_to :item
 - has_one :address
