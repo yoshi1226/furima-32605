@@ -1,27 +1,46 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  before do
+    @user = FactoryBot.build(:user)
+  end
+
   describe '#create' do
-    before do
-      @user = FactoryBot.build(:user)
-    end
 
     it '全ての項目の入力が存在すれば登録できること' do
-      @user = build(:user)
-      expect(@user).to be_valid
+      # @user = build(:user)
+      expect(@user.valid?).to eq true 
     end
 
-    it 'nick_nameがない場合は登録できないこと' do
-      @user.nick_name = nil
+
+
+    it 'nicknameがない場合は登録できないこと' do
+      @user.nickname = ""
       @user.valid?
-      expect(@user.errors[:nick_name]).to include("can't be blank")
+      # binding.pry
+      expect(@user.errors.full_messages).to include()
     end
 
-    'emailがない場合は登録できないこと' do
-      @user.email = nil
+    it 'emailがない場合は登録できないこと' do
+      @user.email = ""
       @user.valid?
       expect(@user.errors[:email]).to include("can't be blank")
     end
+
+    it 'emailが重複している場合は登録できないこと' do
+      @user.save
+      user = FactoryBot.build(:user)
+      user.email = @user.email
+      user.valid?
+      expect(user.errors.full_messages).to include("Email has already been taken")
+    end
+
+    # it "重複したemailが存在する場合登録できない" do
+    #   @user.save
+    #   another_user = FactoryBot.build(:user)
+    #   another_user.email = @user.email
+    #   another_user.valid?
+    #   expect(another_user.errors.full_messages).to include("Email has already been taken")
 
     it 'emailに@がない場合は登録できないこと' do
       @user.email = 'sample.com'
@@ -30,52 +49,53 @@ RSpec.describe User, type: :model do
     end
 
     it 'passwordがない場合は登録できないこと' do
-      @user.password.nil
+      @user.password = ""
       @user.valid?
-      expect(@user.errors[password]).to include("can't be blank")
+      expect(@user.errors[:password]).to include("can't be blank")
     end
 
     it 'password_confirmationがない場合は登録できないこと' do
-      @user.password_confirmation = ''
+      @user.password_confirmation = ""
       @user.valid?
-      expect(@user.errors[:password_confirmation]).include("doesn't match Password")
+      expect(@user.errors[:password_confirmation]).to include("doesn't match Password")
     end
 
     it 'last_nameがない場合は登録できないこと' do
-      @user.last_name = nil
+      @user.last_name = ""
       @user.valid?
       expect(@user.errors[:last_name]).to include("can't be blank")
     end
 
     it 'last_name_kanaがない場合は登録できないこと' do
-      @user.last_name_kana = nil
+      @user.last_name_kana = ""
       @user.valid?
       expect(@user.errors[:last_name_kana]).to include("can't be blank")
     end
 
     it 'first_nameがない場合は登録できないこと' do
-      @user.first_name = nil
+      @user.first_name = ""
       @user.valid?
       expect(@user.errors[:first_name]).to include("can't be blank")
     end
 
     it 'first_name_kanaがない場合は登録できないこと' do
-      @user.first_name_kana = nil
+      @user.first_name_kana = ""
       @user.valid?
       expect(@user.errors[:first_name_kana]).to include("can't be blank")
     end
+
     it 'birthdayがない場合は登録できないこと' do
-      @user.birthday = nil
+      @user.birthday = ""
       @user.valid?
       expect(@user.errors[:birthday]).to include("can't be blank")
     end
 
-    it '重複したemailが存在する場合登録できないこと' do
-      @user = create(:user)
-      another_user = build(;user, email: @user.email)
-      another_user.valid?
-      expect(another user.error[:email]).to include('has already been taken')
-    end
+    # it '重複したemailが存在する場合登録できないこと' do
+    #   @user = create(:user)
+    #   another_user = build(:user, email: @user.email)
+    #   another_user.valid?
+    #   expect(another user.error[:email]).to include('has already been taken')
+    # end
 
     it 'passwordが5文字以下であれば登録できないこと' do
       @user.password = '12345'
