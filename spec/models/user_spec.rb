@@ -8,7 +8,6 @@ RSpec.describe User, type: :model do
   describe '#create' do
 
     it '全ての項目の入力が存在すれば登録できること' do
-      # @user = build(:user)
       expect(@user.valid?).to eq true 
     end
 
@@ -17,7 +16,6 @@ RSpec.describe User, type: :model do
     it 'nicknameがない場合は登録できないこと' do
       @user.nickname = ""
       @user.valid?
-      # binding.pry
       expect(@user.errors.full_messages).to include()
     end
 
@@ -34,13 +32,6 @@ RSpec.describe User, type: :model do
       user.valid?
       expect(user.errors.full_messages).to include("Email has already been taken")
     end
-
-    # it "重複したemailが存在する場合登録できない" do
-    #   @user.save
-    #   another_user = FactoryBot.build(:user)
-    #   another_user.email = @user.email
-    #   another_user.valid?
-    #   expect(another_user.errors.full_messages).to include("Email has already been taken")
 
     it 'emailに@がない場合は登録できないこと' do
       @user.email = 'sample.com'
@@ -89,13 +80,6 @@ RSpec.describe User, type: :model do
       @user.valid?
       expect(@user.errors[:birthday]).to include("can't be blank")
     end
-
-    # it '重複したemailが存在する場合登録できないこと' do
-    #   @user = create(:user)
-    #   another_user = build(:user, email: @user.email)
-    #   another_user.valid?
-    #   expect(another user.error[:email]).to include('has already been taken')
-    # end
 
     it 'passwordが5文字以下であれば登録できないこと' do
       @user.password = '12345'
