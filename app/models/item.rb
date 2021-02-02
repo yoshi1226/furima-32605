@@ -10,7 +10,6 @@ class Item < ApplicationRecord
   has_one_attached :image
 
   with_options presence: true do
-    validates :info
     validates :category_id
     validates :sales_status_id
     validates :shopping_fee_status_id
