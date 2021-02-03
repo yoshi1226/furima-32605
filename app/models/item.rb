@@ -10,11 +10,6 @@ class Item < ApplicationRecord
   has_one_attached :image
 
   with_options presence: true do
-    validates :category_id
-    validates :sales_status_id
-    validates :shopping_fee_status_id
-    validates :prefecture_id
-    validates :scheduled_delivery_id
     validates :price, format: { with: /\A[0-9]+\z/ }
     validates :price, numericality: { greater_than_or_equal_to: 300, less_than:9_999_999 }
     validates :info, length: {maximum: 1000 }
