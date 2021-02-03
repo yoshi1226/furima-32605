@@ -108,6 +108,30 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include("Category must be other than 1")
       end
+
+      it 'prefecture_idが「1」では登録できないこと' do
+        @item.prefecture_id = "1"
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Prefecture must be other than 1")
+      end
+
+      it 'sales_status_idが「1」では登録できないこと' do
+        @item.sales_status_id = "1"
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Sales status must be other than 1")
+      end
+
+      it 'scheduled_delivery_idが「1」では登録できないこと' do
+        @item.scheduled_delivery_id = "1"
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Scheduled delivery must be other than 1")
+      end
+
+      it 'shopping_fee_status_idが「1」では登録できないこと' do
+        @item.shopping_fee_status_id = "1"
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Shopping fee status must be other than 1")
+      end
     end
   end
 end
