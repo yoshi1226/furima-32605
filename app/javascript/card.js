@@ -1,6 +1,5 @@
 const pay = () => {
   Payjp.setPublicKey(process.env.PAYJP_PUBLIC_KEY);
-  // ↑環境変数に置き換える
   const form = document.getElementById("charge-form");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -16,6 +15,8 @@ const pay = () => {
     };
 
     Payjp.createToken(card, (status, response) => {
+      console.log(card, status, response)
+      // debugger
       if (status == 200) {
         const token = response.id;
         console.log(token)
