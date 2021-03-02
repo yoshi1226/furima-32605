@@ -2,11 +2,11 @@ class PurchaseRecordsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @pay = Pay.new
     @item = Item.find(params[:item_id])
-    if current_user.id = @item.user_id
+    if current_user.id == @item.user_id || @item.purchase_record.present?
       return redirect_to root_path
     end
+    @pay = Pay.new
   end
 
   def create
