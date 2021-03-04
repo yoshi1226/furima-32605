@@ -6,91 +6,78 @@ RSpec.describe Pay, type: :model do
   end
 
   describe '商品購入についてのテスト' do
-
     context "購入できる時" do
-      it "必要な情報を適切に入力すると、商品の購入ができること" do
-        expect(@pay).to be_valid
-      end
-
-      it "priceとtokenがあれば保存ができること" do
+      it "配送先の情報として、郵便番号・都道府県・市区町村・番地・電話番号・price・tokenが存在すれば登録できる" do
         expect(@pay).to be_valid
       end
 
     context "購入できない時" do
-      it '郵便番号が必須であること' do
+      it '郵便番号が必須である' do
         @pay.postal_code = ""
         @pay.valid?
         expect(@pay.errors.full_messages).to include("Postal code is invalid")
       end
       
-      it '都道府県が必須であること' do
+      it '都道府県が必須である' do
         @pay.prefecture_id = ""
         @pay.valid?
         expect(@pay.errors.full_messages).to include("Prefecture can't be blank")
       end
       
-      it '市町村が必須であること' do
+      it '市町村が必須である' do
         @pay.city = ""
         @pay.valid?
         expect(@pay.errors.full_messages).to include("City can't be blank")
       end
 
-      it '番地が必須であること' do
+      it '番地が必須である' do
         @pay.addresses = ""
         @pay.valid?
         expect(@pay.errors.full_messages).to include("Addresses can't be blank")
       end
       
-      it '電話番号が必須であること' do
+      it '電話番号が必須である' do
         @pay.phone_number = ""
         @pay.valid?
         expect(@pay.errors.full_messages).to include("Phone number can't be blank")
       end
 
-      it 'ユーザー情報が必須であること' do
+      it 'ユーザー情報が必須である' do
         @pay.user_id = ""
         @pay.valid?
         expect(@pay.errors.full_messages).to include("User can't be blank")
       end
       
-      it 'アイテム情報が必須であること' do
+      it 'アイテム情報が必須である' do
         @pay.item_id = ""
         @pay.valid?
         expect(@pay.errors.full_messages).to include("Item can't be blank")
       end
 
-      it '郵便番号にはハイフンが必要であること（123-4567となる）' do
-        @pay.postal_code = 0000-0000
+      it '郵便番号にはハイフンが必要である（123-4567となる）' do
+        @pay.postal_code = "0000000"
         @pay.valid?
-        expect(@pay.errors.full_messages).to include("Scheduled delivery must be other than 1")
+        expect(@pay.errors.full_messages).to include("Postal code is invalid")
       end
 
-      it '電話番号が11桁以上では登録できないこと' do
-        @pay.shopping_fee_status_id = 111111111111
+      it '電話番号にはハイフンは不要で、11桁以内である（09012345678となる）' do
+        @pay.phone_number = "090123456789"
         @pay.valid?
-        expect(@item.errors.full_messages).to include("Shopping fee status must be other than 1")
+        expect(@pay.errors.full_messages).to include("Phone number is too long (maximum is 11 characters)")
       end
 
       
-        it "priceが空では登録できないこと" do
-          @pay.price = nil
-          @pay.valid?
-          expect(@order.errors.full_messages).to include("Price can't be blank")
-        end
-      
-        it "tokenが空では登録できないこと" do
+        it "tokenが空では登録できない" do
           @pay.token = nil
           @pay.valid?
-          expect(@order.errors.full_messages).to include("Token can't be blank")
+          expect(@pay.errors.full_messages).to include("Token can't be blank")
         end
       end
     end
   end
 end
 
-# - 配送先の情報として、郵便番号・都道府県・市区町村・番地・電話番号が必須であること
-# - 郵便番号にはハイフンが必要であること（123-4567となる）
-# - 電話番号にはハイフンは不要で、11桁以内であること（09012345678となる）
+# - 
 
 # FactoryBot.define do
 #   factory :pay do
