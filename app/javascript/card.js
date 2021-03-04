@@ -16,7 +16,6 @@ const pay = () => {
 
     Payjp.createToken(card, (status, response) => {
       console.log(card, status, response)
-      // debugger
       if (status == 200) {
         const token = response.id;
         console.log(token)

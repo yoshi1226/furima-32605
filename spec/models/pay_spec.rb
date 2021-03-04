@@ -7,9 +7,15 @@ RSpec.describe Pay, type: :model do
 
   describe '商品購入についてのテスト' do
     context "購入できる時" do
-      it "配送先の情報として、郵便番号・都道府県・市区町村・番地・電話番号・price・tokenが存在すれば登録できる" do
+      it '配送先の情報として、郵便番号・都道府県・市区町村・番地・電話番号・price・tokenが存在すれば購入できる' do
         expect(@pay).to be_valid
       end
+
+      it '建物名が入力されていても購入できる' do
+        @pay.building = nil
+        expect(@pay).to be_valid
+      end
+    end
 
     context "購入できない時" do
       it '郵便番号が必須である' do
@@ -19,9 +25,9 @@ RSpec.describe Pay, type: :model do
       end
       
       it '都道府県が必須である' do
-        @pay.prefecture_id = ""
+        @pay.prefecture_id = 1
         @pay.valid?
-        expect(@pay.errors.full_messages).to include("Prefecture can't be blank")
+        expect(@pay.errors.full_messages).to include("Prefecture must be other than 1")
       end
       
       it '市町村が必須である' do
@@ -63,30 +69,20 @@ RSpec.describe Pay, type: :model do
       it '電話番号にはハイフンは不要で、11桁以内である（09012345678となる）' do
         @pay.phone_number = "090123456789"
         @pay.valid?
-        expect(@pay.errors.full_messages).to include("Phone number is too long (maximum is 11 characters)")
+        expect(@pay.errors.full_messages).to include("Phone number is invalid")
       end
 
-      
+      it '電話番号は数字以外が混じっていると購入できない' do
+        @pay.phone_number = "abcdefghijk"
+        @pay.valid?
+        expect(@pay.errors.full_messages).to include("Phone number is invalid")
+      end
+
         it "tokenが空では登録できない" do
           @pay.token = nil
           @pay.valid?
           expect(@pay.errors.full_messages).to include("Token can't be blank")
         end
-      end
     end
   end
 end
-
-# - 
-
-# FactoryBot.define do
-#   factory :pay do
-#     prefecture_id {1}
-#     city          {"東京都"}
-#     addresses     {"1-1"}
-#     phone_number  {00000000000}
-#     user_id       {1}
-#     item_id       {1}
-#     token         {"tok_abcdefghijk00000000000000000"}
-#   end
-# end

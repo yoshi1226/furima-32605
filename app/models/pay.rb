@@ -4,14 +4,15 @@ class Pay
 
   with_options presence: true do
     validates :postal_code,       format: {with: /\A\d{3}[-]\d{4}\z/}
-    validates :prefecture_id
     validates :city
     validates :addresses
-    validates :phone_number,      length: {maximum:11}
+    validates :phone_number,      format: {with: /\A\d{11}\z/}
     validates :user_id
     validates :item_id
     validates :token, presence: true
   end
+  
+  validates :prefecture_id,     numericality: { other_than: 1 }
 
   def save
     purchase_record = PurchaseRecord.create(user_id: user_id, item_id: item_id)

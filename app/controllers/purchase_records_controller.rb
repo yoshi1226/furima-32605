@@ -1,8 +1,8 @@
 class PurchaseRecordsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_item
 
   def index
-    @item = Item.find(params[:item_id])
     if current_user.id == @item.user_id || @item.purchase_record != nil
       return redirect_to root_path
     end
@@ -10,7 +10,9 @@ class PurchaseRecordsController < ApplicationController
   end
 
   def create
-    @item = Item.find(params[:item_id])
+    if current_user.id == @item.user_id || @item.purchase_record != nil
+      return redirect_to root_path
+    end
     @pay = Pay.new(pay_params)
     if @pay.valid?
       pay_item
@@ -20,9 +22,12 @@ class PurchaseRecordsController < ApplicationController
       render action: :index
     end
   end
-end
 
 private
+
+  def set_item
+    @item = Item.find(params[:item_id])
+  end
 
   def pay_params
     params.require(:pay).permit(:postal_code, :prefecture_id, :city, :addresses, :building, :phone_number).merge(user_id:current_user.id, item_id:params[:item_id], token:params[:token])
@@ -36,3 +41,4 @@ private
         currency: 'jpy'
       )
   end
+end
